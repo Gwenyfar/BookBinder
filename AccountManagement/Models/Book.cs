@@ -1,21 +1,16 @@
-﻿using Shared.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
+﻿using BookBinder.Infrastructure.Models;
 
-namespace AccountManagement.Models
+namespace BookBinder.Application.Models
 {
     public class Book : BaseEntity
     {
-        public string Title { get; set; }
-        public string ISBN { get; set; }
-        public string Genre { get; set; }
-        public Publisher Publisher { get; set; }
-        public DateTime PublishedDate { get; set; }
-        public List<Author> Authors => new List<Author>();
+        public virtual string Title { get; set; }
+        public virtual string ISBN { get; set; }
+        public virtual string Genre { get; set; }
+        public virtual Publisher Publisher { get; set; }
+        public virtual DateTime PublishedDate { get; set; }
+        public virtual IList<Author> Authors { get; set; } = new List<Author>();
+        public virtual IList<User> Users { get; set; } = new List<User>();
 
     }
 }

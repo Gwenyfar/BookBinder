@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BookBinder.Infrastructure.Models
+namespace BookBinder.Infrastructure.Repository
 {
-    public interface IEntity
+    public interface IRespository
     {
-       Guid Id { get; set; }
+        Task CommitAsync();
     }
 }

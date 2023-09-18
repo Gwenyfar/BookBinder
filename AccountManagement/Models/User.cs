@@ -1,17 +1,14 @@
 ﻿
 using Microsoft.AspNetCore.Identity;
-using Shared.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using BookBinder.Infrastructure.Models;
 
-namespace AccountManagement.Models
+namespace BookBinder.Application.Models
 {
     public class User : IdentityUser<Guid>, IEntity
     {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
+        public virtual string FirstName { get; set; }
+        public virtual string LastName { get; set; }
+        public virtual IList<Book> Books { get; set; } =
+        new List<Book>();
     }
 }

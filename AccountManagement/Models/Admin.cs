@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using BookBinder.Infrastructure.Models;
 
-namespace AccountManagement.Models
+namespace BookBinder.Application.Models
 {
-    public class Admin : User
+    public class Admin : BaseEntity
     {
+        public virtual string FirstName { get; set; }
+        public virtual string LastName { get; set; }
+        public virtual string Email { get; set; }
     }
 }

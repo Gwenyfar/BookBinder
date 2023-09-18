@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Shared.Models
+namespace BookBinder.Infrastructure.Models
 {
     public class BaseEntity : IEntity
     {

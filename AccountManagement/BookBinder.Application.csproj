@@ -11,11 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Shared\Shared.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="DB.NHibernate\" />
+    <ProjectReference Include="..\Shared\BookBinder.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
