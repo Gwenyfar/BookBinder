@@ -11,7 +11,10 @@ namespace BookBinder.Application.Data.Mappings
             Map(u => u.FirstName).Not.Nullable();
             Map(u => u.LastName).Not.Nullable();
             Map(u => u.Email).Not.Nullable();
-            HasManyToMany(u => u.Books);
+            HasManyToMany(u => u.Books)
+                .Table("AuthorToBook")
+                .ParentKeyColumn("Author_id")
+                .ChildKeyColumn("Book_id");
         }
     }
 }

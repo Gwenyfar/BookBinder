@@ -18,8 +18,14 @@ namespace BookBinder.Application.Data.Mappings
             Map(b => b.Genre).Not.Nullable();
             References(b => b.Publisher);
             Map(b => b.PublishedDate).Not.Nullable();
-            HasManyToMany(b => b.Authors);
-            HasManyToMany(b => b.Users);
+            HasManyToMany(b => b.Authors)
+                .Table("AuthorToBook")
+                .ParentKeyColumn("Book_id")
+                .ChildKeyColumn("Author_id");
+            HasManyToMany(b => b.Users)
+                .Table("UserToBook")
+                .ParentKeyColumn("Book_id")
+                .ChildKeyColumn("User_id");
         }
     }
 }
