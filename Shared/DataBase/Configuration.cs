@@ -29,10 +29,10 @@ namespace BookBinder.Infrastructure.DataBase
             return this;
         }
 
-        public async Task SetupDatabaseSchema(ContainerBuilder containerBuilder)
+        public void SetupDatabaseSchema(ContainerBuilder containerBuilder)
         {
             if (_schema != null)
-                await Database.CreateSchemaAsync(_connectionString, _schema);
+                Database.CreateSchema(_connectionString, _schema);
             if (_migrationsAssembly != null)
                 RunMigrations();
             if (_mappingAssembly != null)

@@ -29,7 +29,7 @@ namespace BookBinder.Infrastructure.DataBase
             .InstancePerLifetimeScope();
         }
 
-        internal static async Task CreateSchemaAsync(string connectionString, string schema)
+        internal static void CreateSchema(string connectionString, string schema)
         {
             var query = $"CREATE SCHEMA [{schema}] AUTHORIZATION [dbo]";
 
@@ -38,7 +38,7 @@ namespace BookBinder.Infrastructure.DataBase
                 using var connection = new SqlConnection(connectionString);
                 using var command = new SqlCommand(query, connection);
                 connection.Open();
-                await command.ExecuteNonQueryAsync();
+                command.ExecuteNonQuery();
             }
             catch(SqlException ex)
             {

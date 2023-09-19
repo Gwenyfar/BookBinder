@@ -15,14 +15,11 @@ namespace BookBinder.Application.Services
         {
             ApplicationSettings = applicationSettings;
             ConfigureContainer();
-            Application.Container = Container;
         }
 
         private void ConfigureContainer()
         {
             var containerBuilder = new ContainerBuilder();
-            InitialiseModuleAsync(ApplicationSettings, containerBuilder);
-
              new Configuration()
                         .Schema(SCHEMA)
                         .ConnectionString(ApplicationSettings.ConnectionString)
@@ -30,10 +27,12 @@ namespace BookBinder.Application.Services
                         .Migrations(typeof(UserMapping).Assembly)
                         .SetupDatabaseSchema(containerBuilder);
 
+            InitialiseModule(ApplicationSettings, containerBuilder);
+
             Container = containerBuilder.Build();
         }
 
-        public void InitialiseModuleAsync(ApplicationSettings applicationSettings, ContainerBuilder containerBuilder)
+        private void InitialiseModule(ApplicationSettings applicationSettings, ContainerBuilder containerBuilder)
         {
             var logger = applicationSettings.LoggerFactory.CreateLogger(AppName);
             logger.LogInformation($"{AppName} is initialising..");
@@ -51,7 +50,7 @@ namespace BookBinder.Application.Services
         }
 
         public ApplicationSettings ApplicationSettings { get; set; }
-        public IContainer Container { get; set; }
+        public IContainer Container { get; private set; }
         public string AppName => "BookBinder";
         public const string SCHEMA  = "BookBinder";
         public Assembly ApplicationAssembly => typeof(AuthorRepository).Assembly;

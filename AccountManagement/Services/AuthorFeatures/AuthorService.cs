@@ -4,14 +4,9 @@ using BookBinder.Application.Models;
 
 namespace BookBinder.Application.Services.AuthorFeatures
 {
-    public class AuthorService : Application
+    public class AuthorService
     {
-        public AuthorService()
-        {
-            var scope = Container.BeginLifetimeScope();
-            Repository = scope.Resolve<AuthorRepository>();
-        }
-
+        
         public async Task<Guid> AddAuthor(AuthorDto author)
         {
             var newAuthor = new Author

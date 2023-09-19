@@ -1,4 +1,6 @@
-﻿using BookBinder.Application.Services.AuthorFeatures;
+﻿using Autofac;
+using BookBinder.Application.Data.Repositories;
+using BookBinder.Application.Services.AuthorFeatures;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,25 +8,29 @@ namespace BookBinder.Controllers
 {
     [Route("api/authors")]
     [ApiController]
-    public class AuthorController : ControllerBase
+    public class AuthorController : BaseController
     {
         private readonly AuthorService _authorService;
-        public AuthorController(AuthorService authorService)
+        public AuthorController(AuthorService authorService, IContainer container):base(container)
         {
             _authorService = authorService;
         }
 
         [HttpPost]
-        public IActionResult AddAuthor(AuthorDto authorDto)
+        public async Task<IActionResult> AddAuthor(AuthorDto authorDto)
         {
-            var author = _authorService.AddAuthor(authorDto);
+            using var scope = Container.BeginLifetimeScope();
+            _authorService.Repository = scope.Resolve<AuthorRepository>();
+            var author = await _authorService.AddAuthor(authorDto);
             return Ok(author);
         }
 
         [HttpGet]
-        public IActionResult FetchAuthors()
+        public async Task<IActionResult> FetchAuthors()
         {
-            var authors = _authorService.FetchAuthors();
+            using var scope = Container.BeginLifetimeScope();
+            _authorService.Repository = scope.Resolve<AuthorRepository>();
+            var authors = await _authorService.FetchAuthors();
             return Ok(authors);
         }
     }
