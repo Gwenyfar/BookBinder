@@ -19,9 +19,24 @@ namespace BookBinder.Application.Services.AuthorFeatures
             return newAuthor.Id;
         }
 
+        public async Task UpdateAuthor(FetchAuthorDto authorDto)
+        {
+            var author = await Repository.FetchByIdAsync(authorDto.Id); 
+            author.FirstName = authorDto.FirstName;
+            author.LastName = authorDto.LastName;
+            author.Email = authorDto.Email;
+            await Repository.UpdateAsync(author);
+        }
+
+        public async Task RemoveAuthor(Guid authorId)
+        {
+            var author = await Repository.FetchByIdAsync(authorId);
+            await Repository.RemoveAsync(author);
+        }
+
         public async Task<IEnumerable<FetchAuthorDto>> FetchAuthors()
         {
-            var authors = Repository.FetchAllAsync();
+            var authors = await Repository.FetchAllAsync();
 
             return authors.Select(a => new FetchAuthorDto
             {

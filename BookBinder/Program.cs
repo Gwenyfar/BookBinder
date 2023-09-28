@@ -1,6 +1,7 @@
 using Autofac;
 using BookBinder.Application.Services;
 using BookBinder.Application.Services.AuthorFeatures;
+using BookBinder.Application.Services.PublisherFeatures;
 using BookBinder.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,7 +19,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped(typeof(AuthorService));
-builder.Services.AddScoped(c=>bootstrapper.Container);
+builder.Services.AddScoped(typeof(PublisherService));
+builder.Services.AddSingleton(c=>bootstrapper.Container);
 
 var app = builder.Build();
 

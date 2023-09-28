@@ -1,5 +1,6 @@
 ﻿using BookBinder.Infrastructure.Models;
 using NHibernate;
+using NHibernate.Linq;
 using NHibernate.Mapping;
 using System;
 using System.Collections.Generic;
@@ -22,10 +23,16 @@ namespace BookBinder.Infrastructure.Repository
             await CommitAsync();
         }
 
-        public List<T> FetchAllAsync()
+        public async Task<List<T>> FetchAllAsync()
         {
-            var entities = Session.Query<T>().ToList();
+            var entities = await Session.Query<T>().ToListAsync();
             return entities;
+        }
+
+        public async Task<T> FetchByIdAsync(Guid id)
+        {
+            var entity = await Session.Query<T>().FirstOrDefaultAsync(x => x.Id == id);
+            return entity;
         }
 
         public async Task RemoveAsync(T entity)

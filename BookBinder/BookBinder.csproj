@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AccountManagement\BookBinder.Application.csproj" />
+    <ProjectReference Include="..\BookBinder.Application\BookBinder.Application.csproj" />
   </ItemGroup>
 
 </Project>

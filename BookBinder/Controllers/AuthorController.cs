@@ -19,19 +19,69 @@ namespace BookBinder.Controllers
         [HttpPost]
         public async Task<IActionResult> AddAuthor(AuthorDto authorDto)
         {
-            using var scope = Container.BeginLifetimeScope();
-            _authorService.Repository = scope.Resolve<AuthorRepository>();
-            var author = await _authorService.AddAuthor(authorDto);
-            return Ok(author);
+            try
+            {
+                using var scope = Container.BeginLifetimeScope();
+                _authorService.Repository = scope.Resolve<AuthorRepository>();
+                var author = await _authorService.AddAuthor(authorDto);
+                return Ok(author);
+            }
+            catch (Exception ex) 
+            {
+                return BadRequest(ex.Message);
+            }
+            
         }
 
         [HttpGet]
         public async Task<IActionResult> FetchAuthors()
         {
-            using var scope = Container.BeginLifetimeScope();
-            _authorService.Repository = scope.Resolve<AuthorRepository>();
-            var authors = await _authorService.FetchAuthors();
-            return Ok(authors);
+            try
+            {
+                using var scope = Container.BeginLifetimeScope();
+                _authorService.Repository = scope.Resolve<AuthorRepository>();
+                var authors = await _authorService.FetchAuthors();
+                return Ok(authors);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+            
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateAuthor(FetchAuthorDto authorDto)
+        {
+            try
+            {
+                using var scope = Container.BeginLifetimeScope();
+                _authorService.Repository = scope.Resolve<AuthorRepository>();
+                await _authorService.UpdateAuthor(authorDto);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+           
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> RemoveAuthor(Guid id)
+        {
+            try
+            {
+                using var scope = Container.BeginLifetimeScope();
+                _authorService.Repository = scope.Resolve<AuthorRepository>();
+                await _authorService.RemoveAuthor(id);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
         }
     }
 }
