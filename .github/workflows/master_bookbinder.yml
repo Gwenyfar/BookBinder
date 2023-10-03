@@ -28,7 +28,7 @@ jobs:
         run: dotnet build --configuration Release
 
       - name: dotnet test
-      - uses: EasyDesk/action-dotnet-test@v1
+        uses: EasyDesk/action-dotnet-test@v1
         with:
           path: '**/*Tests/*.csproj'
           
