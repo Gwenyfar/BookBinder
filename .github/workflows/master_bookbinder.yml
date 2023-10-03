@@ -29,8 +29,6 @@ jobs:
 
       - name: dotnet test
         uses: EasyDesk/action-dotnet-test@v1
-        with:
-          path: '**/BookBinder.Tests.csproj'
           
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
