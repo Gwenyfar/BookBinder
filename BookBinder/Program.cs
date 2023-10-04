@@ -1,7 +1,6 @@
-using Autofac;
-using BookBinder.Application.Services;
 using BookBinder.Application.Services.AuthorFeatures;
 using BookBinder.Application.Services.PublisherFeatures;
+using BookBinder.Infrastructure.Utilities;
 using BookBinder.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,11 +24,11 @@ builder.Services.AddSingleton(c=>bootstrapper.Container);
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+//if (app.Environment.IsDevelopment())
+//{
+//    app.UseSwagger();
+//    app.UseSwaggerUI();
+//}
 
 app.UseHttpsRedirection();
 
