@@ -12,8 +12,12 @@ namespace BookBinder.Infrastructure.Utilities
         public bool Successful { get; set; }
         public bool NotSuccessful => Successful != true;
         public HttpStatusCode StatusCode { get; set; }
-        public List<string> Errors { get; protected set; }
-
+        public List<string> Errors { get; protected set; } = new List<string>();
+        public ResponseResult AddErrors(List<string> errorMessages)
+        {
+            Errors.AddRange(errorMessages);
+            return this;
+        }
         public ResponseResult AddError(string errorMessage)
         {
             Errors.Add(errorMessage);
@@ -40,6 +44,12 @@ namespace BookBinder.Infrastructure.Utilities
         public static new ResponseResult<T> Failed(HttpStatusCode statusCode)
         {
             return new ResponseResult<T> { Successful = true, StatusCode = statusCode };
+        }
+
+        public new ResponseResult<T> AddErrors(List<string> errorMessages)
+        {
+            Errors.AddRange(errorMessages);
+            return this;
         }
 
         public new ResponseResult<T> AddError(string errorMessage)
