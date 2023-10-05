@@ -1,4 +1,4 @@
-﻿using BookBinder.Application.Models;
+﻿using BookBinder.Domain.Models;
 
 namespace BookBinder.Infrastructure.Mapping
 {

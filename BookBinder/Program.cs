@@ -1,6 +1,4 @@
-using BookBinder.Application.Services.AuthorFeatures;
-using BookBinder.Application.Services.PublisherFeatures;
-using BookBinder.Infrastructure.Utilities;
+using BookBinder.Application;
 using BookBinder.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,18 +15,16 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddScoped(typeof(AuthorService));
-builder.Services.AddScoped(typeof(PublisherService));
-builder.Services.AddSingleton(c=>bootstrapper.Container);
+builder.Services.AddScoped<IApplication>(a => bootstrapper.Application);
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-//if (app.Environment.IsDevelopment())
-//{
-//    app.UseSwagger();
-//    app.UseSwaggerUI();
-//}
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
 app.UseHttpsRedirection();
 

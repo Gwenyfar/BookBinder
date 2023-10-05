@@ -1,5 +1,4 @@
-﻿using BookBinder.Application.Models;
-using BookBinder.Infrastructure.Mapping;
+﻿using BookBinder.Domain.Models;
 
 namespace BookBinder.Infrastructure.Mapping
 {

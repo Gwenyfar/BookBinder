@@ -1,10 +1,5 @@
-﻿using BookBinder.Infrastructure.Models;
+﻿using BookBinder.Domain.Models;
 using FluentNHibernate.Mapping;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BookBinder.Infrastructure.Mapping
 {
