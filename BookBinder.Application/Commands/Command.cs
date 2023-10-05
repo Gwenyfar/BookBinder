@@ -7,11 +7,12 @@ using System.Threading.Tasks;
 
 namespace BookBinder.Application.Commands
 {
+    
     public abstract class Command : IRequestValidator
     {
         public abstract ResponseResult ValidateBody();
     }
-    public abstract class Command<TResponse> : Command, IRequestValidator
+    public abstract class Command<TResponse> : Command
     {
         
     }

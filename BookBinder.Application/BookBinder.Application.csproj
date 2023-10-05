@@ -15,9 +15,4 @@
     <ProjectReference Include="..\Shared\BookBinder.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Services\BookFeatures\" />
-    <Folder Include="Services\UserFeatures\" />
-  </ItemGroup>
-
 </Project>
