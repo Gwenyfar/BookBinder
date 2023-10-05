@@ -10,9 +10,4 @@
     <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="7.0.11" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\BookBinder.Infrastructure\BookBinder.Infrastructure.csproj" />
-    <ProjectReference Include="..\Shared\BookBinder.Infrastructure.csproj" />
-  </ItemGroup>
-
 </Project>

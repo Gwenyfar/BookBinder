@@ -1,7 +1,4 @@
-using Autofac;
-using BookBinder.Application.Services;
-using BookBinder.Application.Services.AuthorFeatures;
-using BookBinder.Application.Services.PublisherFeatures;
+using BookBinder.Application;
 using BookBinder.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,9 +15,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddScoped(typeof(AuthorService));
-builder.Services.AddScoped(typeof(PublisherService));
-builder.Services.AddSingleton(c=>bootstrapper.Container);
+builder.Services.AddScoped<IApplication>(a => bootstrapper.Application);
 
 var app = builder.Build();
 

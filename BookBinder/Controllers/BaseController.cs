@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using BookBinder.Application;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,10 +8,10 @@ namespace BookBinder.Controllers
     
     public class BaseController : ControllerBase
     {
-        public BaseController(IContainer container)
+        public BaseController(IApplication application)
         {
-            Container = container;
+            Application = application;
         }
-        public IContainer Container { get; set; }
+        public IApplication Application { get; set; }
     }
 }
