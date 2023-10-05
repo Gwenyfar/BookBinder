@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace BookBinder.Infrastructure.DataBaseConfiguration
 {
-    internal static class Database
+    public static class Database
     {
         internal static void Configure(Assembly mappingAssembly, string schema, 
             ContainerBuilder builder, string connectionString)
@@ -45,6 +45,8 @@ namespace BookBinder.Infrastructure.DataBaseConfiguration
                 Console.WriteLine(ex.Message);
             }
         }
+
+        public const string SCHEMA = "BookBinder";
 
     }
 }

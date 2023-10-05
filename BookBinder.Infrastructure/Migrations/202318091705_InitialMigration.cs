@@ -1,4 +1,5 @@
-﻿using BookBinder.Infrastructure.Utilities;
+﻿using BookBinder.Infrastructure.DataBaseConfiguration;
+using BookBinder.Infrastructure.Utilities;
 using FluentMigrator;
 
 namespace BookBinder.Infrastructure.Migrations
@@ -9,7 +10,7 @@ namespace BookBinder.Infrastructure.Migrations
         public override void Up()
         {
             Create.Table("Users")
-                .InSchema(Bootstrapper.SCHEMA)
+                .InSchema(Database.SCHEMA)
                 .WithColumn("Id").AsGuid().Unique().NotNullable().PrimaryKey()
                 .WithColumn("FirstName").AsString().NotNullable()
                 .WithColumn("LastName").AsString().NotNullable()
@@ -18,28 +19,28 @@ namespace BookBinder.Infrastructure.Migrations
                 .WithColumn("PhoneNumber").AsString().Nullable();
 
             Create.Table("Authors")
-                .InSchema(Bootstrapper.SCHEMA)
+                .InSchema(Database.SCHEMA)
                 .WithColumn("Id").AsGuid().Unique().NotNullable().PrimaryKey()
                 .WithColumn("FirstName").AsString().NotNullable()
                 .WithColumn("LastName").AsString().NotNullable()
                 .WithColumn("Email").AsString().NotNullable().Indexed("IX_Authors_Email");
 
             Create.Table("Admins")
-                .InSchema(Bootstrapper.SCHEMA)
+                .InSchema(Database.SCHEMA)
                 .WithColumn("Id").AsGuid().Unique().NotNullable().PrimaryKey()
                 .WithColumn("FirstName").AsString().NotNullable()
                 .WithColumn("LastName").AsString().NotNullable()
                 .WithColumn("Email").AsString().NotNullable();
 
             Create.Table("Publishers")
-                .InSchema(Bootstrapper.SCHEMA)
+                .InSchema(Database.SCHEMA)
                 .WithColumn("Id").AsGuid().Unique().NotNullable().PrimaryKey()
                 .WithColumn("Company").AsString().NotNullable()
                 .WithColumn("Address").AsString().NotNullable()
                 .WithColumn("Email").AsString().NotNullable().Indexed("IX_Users_Email");
 
             Create.Table("Books")
-                .InSchema(Bootstrapper.SCHEMA)
+                .InSchema(Database.SCHEMA)
                 .WithColumn("Id").AsGuid().Unique().NotNullable().PrimaryKey()
                 .WithColumn("Title").AsString().NotNullable()
                 .WithColumn("ISBN").AsString().NotNullable()
@@ -49,62 +50,62 @@ namespace BookBinder.Infrastructure.Migrations
 
             Create.ForeignKey("Fk_Books_Publishers")
                 .FromTable("Books")
-                .InSchema(Bootstrapper.SCHEMA)
+                .InSchema(Database.SCHEMA)
                 .ForeignColumn("Publisher_id")
                 .ToTable("Publishers")
-                .InSchema(Bootstrapper.SCHEMA)
+                .InSchema(Database.SCHEMA)
                 .PrimaryColumn("Id");
 
             Create.Table("AuthorToBook")
-                .InSchema(Bootstrapper.SCHEMA)
+                .InSchema(Database.SCHEMA)
                 .WithColumn("Author_id").AsGuid().NotNullable()
                 .WithColumn("Book_id").AsGuid().NotNullable();
 
             Create.Table("UserToBook")
-                .InSchema(Bootstrapper.SCHEMA)
+                .InSchema(Database.SCHEMA)
                 .WithColumn("User_id").AsGuid().NotNullable()
                 .WithColumn("Book_id").AsGuid().NotNullable();
 
             Create.ForeignKey("Fk_AuthorToBook_Author_id")
                 .FromTable("AuthorToBook")
-                .InSchema(Bootstrapper.SCHEMA)
+                .InSchema(Database.SCHEMA)
                 .ForeignColumn("Author_id")
                 .ToTable("Authors")
-                .InSchema (Bootstrapper.SCHEMA)
+                .InSchema (Database.SCHEMA)
                 .PrimaryColumn ("Id");
 
             Create.ForeignKey("Fk_AuthorToBook_Book_id")
                 .FromTable("AuthorToBook")
-                .InSchema(Bootstrapper.SCHEMA)
+                .InSchema(Database.SCHEMA)
                 .ForeignColumn("Book_id")
                 .ToTable("Books")
-                .InSchema(Bootstrapper.SCHEMA)
+                .InSchema(Database.SCHEMA)
                 .PrimaryColumn("Id");
 
             Create.ForeignKey("Fk_UserToBook_User_id")
                 .FromTable("UserToBook")
-                .InSchema(Bootstrapper.SCHEMA)
+                .InSchema(Database.SCHEMA)
                 .ForeignColumn("User_id")
                 .ToTable("Users")
-                .InSchema(Bootstrapper.SCHEMA)
+                .InSchema(Database.SCHEMA)
                 .PrimaryColumn("Id");
 
             Create.ForeignKey("Fk_UserToBook_Book_id")
                 .FromTable("UserToBook")
-                .InSchema(Bootstrapper.SCHEMA)
+                .InSchema(Database.SCHEMA)
                 .ForeignColumn("Book_id")
                 .ToTable("Books")
-                .InSchema(Bootstrapper.SCHEMA)
+                .InSchema(Database.SCHEMA)
                 .PrimaryColumn("Id");
 
             Create.PrimaryKey("Pk_Author_Book_id")
                 .OnTable("AuthorToBook")
-                .WithSchema(Bootstrapper.SCHEMA)
+                .WithSchema(Database.SCHEMA)
                 .Columns("Author_id", "Book_id");
 
             Create.PrimaryKey("Pk_User_Book_id")
                 .OnTable("UserToBook")
-                .WithSchema(Bootstrapper.SCHEMA)
+                .WithSchema(Database.SCHEMA)
                 .Columns("User_id", "Book_id");
         }
     }
