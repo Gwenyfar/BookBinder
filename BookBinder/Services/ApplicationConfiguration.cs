@@ -6,7 +6,7 @@ namespace BookBinder.Services
     {
         private static string ExtractSQLConnectionString(this IConfiguration configuration)
         {
-            var connectionString = configuration.GetConnectionString("SQLDB");
+            var connectionString = configuration.GetSection("CCL").GetValue<string>("SQLDB");
             return connectionString;
         }
 
