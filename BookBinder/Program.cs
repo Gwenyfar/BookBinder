@@ -6,9 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 var configuration = builder.Configuration;
-
 var appConfig = configuration.ExtractAppSettings(LoggerFactory.Create(l => l.AddConsole()));
-
 var bootstrapper = new Bootstrapper(appConfig);
 
 builder.Services.AddControllers();
