@@ -1,7 +1,9 @@
 ﻿using Autofac;
 using BookBinder.Application;
+using BookBinder.Infrastructure.Utilities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace BookBinder.Controllers
 {
@@ -13,5 +15,14 @@ namespace BookBinder.Controllers
             Application = application;
         }
         public IApplication Application { get; set; }
+
+        private IActionResult FetchResponse(ResponseResult result)
+        {
+            return result.StatusCode switch
+            {
+                HttpStatusCode.BadRequest => new BadRequestObjectResult(result)
+                HttpStatusCode.
+            }
+        }
     }
 }
