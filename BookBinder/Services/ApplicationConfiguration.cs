@@ -4,10 +4,9 @@ namespace BookBinder.Services
 {
     public static class ApplicationConfiguration
     {
-        private static string ExtractSQLConnectionString(this IConfiguration configuration)
+        private static string ExtractSQLConnectionString(IConfiguration configuration)
         {
             var connectionString = configuration["CCL:SQLDB"];
-            //var connectionString = config.GetConnectionString("SQLDB");
             return connectionString;
         }
 
@@ -15,7 +14,7 @@ namespace BookBinder.Services
         {
             return new ApplicationSettings
             {
-                ConnectionString = configuration.ExtractSQLConnectionString(),
+                ConnectionString = ExtractSQLConnectionString(configuration),
                 LoggerFactory = loggerFactory
             };
         }
