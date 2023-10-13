@@ -8,8 +8,16 @@ using System.Threading.Tasks;
 
 namespace BookBinder.Application.Commands.UpdateAuthor
 {
+    /// <summary>
+    /// handles a request to update an author
+    /// </summary>
     public class UpdateAuthorCommandHandler : CommandHandler<UpdateAuthorCommand>
     {
+        /// <summary>
+        /// updates an existing author
+        /// </summary>
+        /// <param name="command">request to update an author</param>
+        /// <returns>a response result</returns>
         public override async Task<ResponseResult> ResolveAsync(UpdateAuthorCommand command)
         {
             var author = await DbContext.AuthorRepository.FetchByIdAsync(command.Id);

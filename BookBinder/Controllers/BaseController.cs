@@ -7,15 +7,31 @@ using System.Net;
 
 namespace BookBinder.Controllers
 {
+    /// <summary>
+    /// base class for all controllers
+    /// </summary>
     
     public class BaseController : ControllerBase
     {
+        /// <summary>
+        /// a constructor
+        /// </summary>
+        /// <param name="application">grants access to applicaion</param>
         public BaseController(IApplication application)
         {
             Application = application;
         }
+
+        /// <summary>
+        /// application representation
+        /// </summary>
         public IApplication Application { get; set; }
 
+        /// <summary>
+        /// returns an object response type based on the status code input
+        /// </summary>
+        /// <param name="result">a response from the application</param>
+        /// <returns>an object result</returns>
         protected IActionResult FetchResponse(ResponseResult result)
         {
             return result.StatusCode switch
@@ -30,6 +46,9 @@ namespace BookBinder.Controllers
         }
     }
 
+    /// <summary>
+    /// an object result response for an internal server error
+    /// </summary>
     public class InternalServerObjectResult : ObjectResult
     {
         public InternalServerObjectResult(object? value) : base(value)

@@ -10,8 +10,18 @@ using System.Threading.Tasks;
 
 namespace BookBinder.Infrastructure.DataBaseConfiguration
 {
+    /// <summary>
+    /// connects to the database
+    /// </summary>
     public static class Database
     {
+        /// <summary>
+        /// registers the session and session factory with the DI container
+        /// </summary>
+        /// <param name="mappingAssembly">mapping assembly</param>
+        /// <param name="schema">schema name</param>
+        /// <param name="builder">container builder</param>
+        /// <param name="connectionString">connection string</param>
         internal static void Configure(Assembly mappingAssembly, string schema, 
             ContainerBuilder builder, string connectionString)
         {
@@ -29,6 +39,11 @@ namespace BookBinder.Infrastructure.DataBaseConfiguration
             .InstancePerLifetimeScope();
         }
 
+        /// <summary>
+        /// Creates database schema
+        /// </summary>
+        /// <param name="connectionString">the connection string</param>
+        /// <param name="schema">schema name</param>
         internal static void CreateSchema(string connectionString, string schema)
         {
             var query = $"CREATE SCHEMA [{schema}] AUTHORIZATION [dbo]";

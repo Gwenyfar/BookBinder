@@ -12,8 +12,15 @@ using System.Reflection;
 
 namespace BookBinder.Application
 {
+    /// <summary>
+    /// configures application dependencies 
+    /// </summary>
     public class Bootstrapper
     {
+        /// <summary>
+        /// constructor
+        /// </summary>
+        /// <param name="applicationSettings">settings extracted from secrets and environment variables</param>
         public Bootstrapper(ApplicationSettings applicationSettings)
         {
             ApplicationSettings = applicationSettings;
@@ -21,6 +28,9 @@ namespace BookBinder.Application
             ConfigureContainer();
         }
 
+        /// <summary>
+        /// sets up all application dependencies
+        /// </summary>
         private void ConfigureContainer()
         {
             var containerBuilder = new ContainerBuilder();
@@ -36,6 +46,7 @@ namespace BookBinder.Application
             Container = containerBuilder.Build();
             Application.Container = Container;
         }
+
         private Type FilterHandlers(Type type, Type handlerType)
         {
             var t = type
@@ -44,6 +55,12 @@ namespace BookBinder.Application
                var result = sort .Single();
             return result;
         }
+
+        /// <summary>
+        /// registers all dependencies with the DI container
+        /// </summary>
+        /// <param name="applicationSettings">core app settings</param>
+        /// <param name="containerBuilder">autofac's container builder</param>
         private void InitialiseModule(ApplicationSettings applicationSettings, ContainerBuilder containerBuilder)
         {
             var logger = applicationSettings.LoggerFactory.CreateLogger(AppName);
@@ -80,6 +97,10 @@ namespace BookBinder.Application
                 .InstancePerLifetimeScope();
         }
 
+        /// <summary>
+        /// registers repository types with the DI container
+        /// </summary>
+        /// <param name="containerBuilder">autofac's container builder</param>
         private void RegisterRepositories(ContainerBuilder containerBuilder)
         {
             
@@ -89,11 +110,22 @@ namespace BookBinder.Application
             containerBuilder.RegisterType<PublisherRepository>()
                 .As<IPublisherRepository>().InstancePerLifetimeScope();
         }
+        /// <summary>
+        /// application settings
+        /// </summary>
         public ApplicationSettings ApplicationSettings { get; set; }
+        /// <summary>
+        /// DI container
+        /// </summary>
         public IContainer Container { get; private set; }
+        /// <summary>
+        /// Application instance
+        /// </summary>
         public Application Application { get; set; }
         public string AppName => "BookBinder";
-        
+        /// <summary>
+        /// assembly where commands and queries reside
+        /// </summary>
         public Assembly ApplicationAssembly => typeof(CreateAuthorCommand).Assembly;
     }
 }

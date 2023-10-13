@@ -8,8 +8,16 @@ using System.Threading.Tasks;
 
 namespace BookBinder.Application.Commands.CreateAuthor
 {
+    /// <summary>
+    /// handles the request to create an author
+    /// </summary>
     public class CreateAuthorCommandHandler : CommandHandler<CreateAuthorCommand, Guid>
     {
+        /// <summary>
+        /// creates a new author
+        /// </summary>
+        /// <param name="command">details of the author</param>
+        /// <returns>the unique id of new uthor</returns>
         public override async Task<ResponseResult<Guid>> ResolveAsync(CreateAuthorCommand command)
         {
             var newAuthor = new Author

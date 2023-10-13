@@ -12,8 +12,18 @@ using System.Threading.Tasks;
 
 namespace BookBinder.Application
 {
+    /// <summary>
+    /// calls methods that handle commands and queries
+    /// </summary>
     public class Application : IApplication
     {
+        /// <summary>
+        /// handles a command that returns data
+        /// </summary>
+        /// <typeparam name="TCommand">command type</typeparam>
+        /// <typeparam name="TResponse">response type</typeparam>
+        /// <param name="command">a command</param>
+        /// <returns>a response result</returns>
         public async Task<ResponseResult<TResponse>> ExecuteCommandAsync<TCommand, TResponse>(TCommand command) where TCommand : Command<TResponse>
         {
             var validation = command.ValidateBody();
@@ -35,6 +45,12 @@ namespace BookBinder.Application
             
         }
 
+        /// <summary>
+        /// executes a command that doesn't return any data
+        /// </summary>
+        /// <typeparam name="TCommand">a command type</typeparam>
+        /// <param name="command">a command</param>
+        /// <returns>a response result</returns>
         public async Task<ResponseResult> ExecuteCommandAsync<TCommand>(TCommand command) where TCommand : Command
         {
             var validation = command.ValidateBody();
@@ -55,6 +71,13 @@ namespace BookBinder.Application
             }
         }
 
+        /// <summary>
+        /// executes a query
+        /// </summary>
+        /// <typeparam name="TQuery">query type</typeparam>
+        /// <typeparam name="TResponse">response type</typeparam>
+        /// <param name="query">a query</param>
+        /// <returns>a response result</returns>
         public async Task<ResponseResult<TResponse>> ExecuteQueryAsync<TQuery, TResponse>(TQuery query) where TQuery : IQuery<TResponse>
         {
             var validation = query.ValidateBody();
@@ -76,6 +99,9 @@ namespace BookBinder.Application
             }
         }
 
+        /// <summary>
+        /// autofac container
+        /// </summary>
         public IContainer Container { get; set; }
     }
 }

@@ -8,8 +8,16 @@ using System.Threading.Tasks;
 
 namespace BookBinder.Application.Queries.FetchAuthors
 {
+    /// <summary>
+    /// handles request to fetch all authors
+    /// </summary>
     public class FetchAuthorsQueryHandler : QueryHandler<FetchAuthorsQuery, IEnumerable<FetchAuthorDto>>
     {
+        /// <summary>
+        /// fetches all authors from the database
+        /// </summary>
+        /// <param name="query">request body</param>
+        /// <returns>a list of all authors</returns>
         public override async Task<ResponseResult<IEnumerable<FetchAuthorDto>>> ResolveAsync(FetchAuthorsQuery query)
         {
             var authors = await DbContext.AuthorRepository.FetchAllAsync();

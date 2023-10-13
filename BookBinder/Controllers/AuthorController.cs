@@ -6,6 +6,7 @@ using BookBinder.Application.Commands.DeleteAuthor;
 using BookBinder.Application.Commands.UpdateAuthor;
 using BookBinder.Application.Queries.FetchAuthors;
 using BookBinder.Domain.DTOs;
+using BookBinder.Infrastructure.Utilities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookBinder.Controllers
@@ -18,7 +19,7 @@ namespace BookBinder.Controllers
     public class AuthorController : BaseController
     {
         /// <summary>
-        /// A constructor
+        /// constructor
         /// </summary>
         /// <param name="application">contains application callers</param>
         public AuthorController(IApplication application):base(application)
@@ -41,6 +42,9 @@ namespace BookBinder.Controllers
         /// </remarks>
         /// <param name="command">new author information</param>
         /// <returns>new author's id</returns>
+        [ProducesResponseType(typeof(ResponseResult<Guid>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ResponseResult), StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(ResponseResult), StatusCodes.Status400BadRequest)]
         [HttpPost]
         public async Task<IActionResult> AddAuthor(CreateAuthorCommand command)
         {
@@ -49,6 +53,18 @@ namespace BookBinder.Controllers
             
         }
 
+        /// <summary>
+        /// action to return all authors
+        /// <remarks>
+        /// Sample request:
+        /// 
+        ///     GET api/authors
+        /// </remarks>
+        /// </summary>
+        /// <returns>all authors</returns>
+        [ProducesResponseType(typeof(ResponseResult<IEnumerable<FetchAuthorDto>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ResponseResult), StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(ResponseResult), StatusCodes.Status400BadRequest)]
         [HttpGet]
         public async Task<IActionResult> FetchAuthors()
         {
@@ -58,6 +74,24 @@ namespace BookBinder.Controllers
 
         }
 
+        /// <summary>
+        /// action to update properties of an author
+        /// <remarks>
+        /// Sample request:
+        /// 
+        ///     PUT api/authors
+        ///     {
+        ///         "id": "a9852712-124b-4c3b-8ae2-d43b3d126b2b"
+        ///         "firstName": "Iruoma",
+        ///         "lastName": "Onyia",
+        ///         "email": "iru@gmail.com"
+        ///     }
+        /// </remarks>
+        /// </summary>
+        /// <param name="command">model used to update an author</param>
+        [ProducesResponseType(typeof(ResponseResult), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ResponseResult), StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(ResponseResult), StatusCodes.Status400BadRequest)]
         [HttpPut]
         public async Task<IActionResult> UpdateAuthor(UpdateAuthorCommand command)
         {
@@ -66,6 +100,18 @@ namespace BookBinder.Controllers
 
         }
 
+        /// <summary>
+        /// action to delete an author
+        /// <remark>
+        /// Sample request:
+        /// 
+        ///     DELETE api/authors/id/a9852712-124b-4c3b-8ae2-d43b3d126b2b
+        /// </remark>
+        /// </summary>
+        /// <param name="id"></param>
+        [ProducesResponseType(typeof(ResponseResult), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ResponseResult), StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(ResponseResult), StatusCodes.Status400BadRequest)]
         [HttpDelete("{id}")]
         public async Task<IActionResult> RemoveAuthor(Guid id)
         {

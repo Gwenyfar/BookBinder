@@ -7,8 +7,16 @@ using System.Threading.Tasks;
 
 namespace BookBinder.Application.Commands.DeleteAuthor
 {
+    /// <summary>
+    /// handles the request to create an author
+    /// </summary>
     public class DeleteAuthorCommandHandler : CommandHandler<DeleteAuthorCommand>
     {
+        /// <summary>
+        /// deletes an author from the database
+        /// </summary>
+        /// <param name="command">request body</param>
+        /// <returns>a parameterless response result</returns>
         public override async Task<ResponseResult> ResolveAsync(DeleteAuthorCommand command)
         {
             var author = await DbContext.AuthorRepository.FetchByIdAsync(command.Id);

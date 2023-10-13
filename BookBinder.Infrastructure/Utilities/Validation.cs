@@ -7,13 +7,25 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace BookBinder.Infrastructure.Utilities
 {
+    /// <summary>
+    /// performs validation on request body
+    /// </summary>
     public class Validation
     {
+        /// <summary>
+        /// constructor
+        /// </summary>
         public Validation()
         {
             Result = ResponseResult.Success();
         }
 
+        /// <summary>
+        /// validates a string
+        /// </summary>
+        /// <param name="input">input string</param>
+        /// <param name="errorMessage">error message</param>
+        /// <returns>this validation object</returns>
         public Validation IsValidString(string input, string errorMessage)
         {
             var isInvalid = string.IsNullOrWhiteSpace(input) || string.IsNullOrEmpty(input);
@@ -27,6 +39,13 @@ namespace BookBinder.Infrastructure.Utilities
             }
             return this;
         }
+
+        /// <summary>
+        /// validates a guid
+        /// </summary>
+        /// <param name="input">input guid</param>
+        /// <param name="errorMessage">error message on failure</param>
+        /// <returns>this validation object</returns>
         public Validation IsValidGuid(Guid input, string errorMessage)
         {
             var isInvalid = input.ToString().Length != 32;
@@ -40,6 +59,10 @@ namespace BookBinder.Infrastructure.Utilities
             }
             return this;
         }
+
+        /// <summary>
+        /// a response after all validation
+        /// </summary>
         public ResponseResult Result { get; set; }
     }
 }
