@@ -1,5 +1,6 @@
 using BookBinder.Application;
 using BookBinder.Services;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,7 +13,12 @@ var bootstrapper = new Bootstrapper(appConfig);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    var path = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var pathString = Path.Combine(AppContext.BaseDirectory, path);
+    options.IncludeXmlComments(pathString);
+});
 builder.Services.AddScoped<IApplication>(a => bootstrapper.Application);
 
 var app = builder.Build();

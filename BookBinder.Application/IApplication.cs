@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 
 namespace BookBinder.Application
 {
+    /// <summary>
+    /// interface for application functionalities
+    /// </summary>
     public interface IApplication
     {
         Task<ResponseResult<TResponse>> ExecuteCommandAsync<TCommand, TResponse>(TCommand command) where TCommand : Command<TResponse>;

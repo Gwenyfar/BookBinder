@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace BookBinder.Infrastructure.DataBaseConfiguration
 {
+    /// <summary>
+    /// session factory interface
+    /// </summary>
     public interface INhibernateSessionFactory
     {
         ISession GetSession();
