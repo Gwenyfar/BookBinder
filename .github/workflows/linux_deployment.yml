@@ -45,7 +45,6 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: .bookbinderApi
-          path: ./bookbinder
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
@@ -53,4 +52,4 @@ jobs:
         with:
           app-name: 'bookbinder-alternate'
           publish-profile: ${{ secrets.BOOKBINDER_ALTERNATE_PUBLISH_PROFILE }}
-          package: .
+          package: ./bookbinder
