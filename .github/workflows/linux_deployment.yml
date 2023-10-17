@@ -52,4 +52,5 @@ jobs:
         with:
           app-name: 'bookbinder-alternate'
           publish-profile: ${{ secrets.BOOKBINDER_ALTERNATE_PUBLISH_PROFILE }}
-          package: bookbinder
+          package: .
+          target-path: /home/site/wwwroot/bookbinder
