@@ -72,3 +72,16 @@ This endpoint deletes an existing author from the database.
   -  If author id is incorrect, it returns a `BadRequest` response with error message.
   -  If the author doesn't exis it returns a `NotFound` response with error message.
   -  If there's a failure commiting to the database, it returns an `InternalServerError` response.
+
+## Deployment to Azure App Service
+This api was deployed to two azure app service plans, windows and linux; this section describes the deployment process for both cases.
+### Steps
+- Ensure you have an azure account with an active subscription.
+- On azure portal create a new resource and select web app.
+### Basics
+1. Create a new resource group for your web application i.e. a resource group is used to hold a group of related azure resources that can exchange data between themselves. The resource group for this web app is named bookbinder.
+2. Choose the specifics of your application like the runtime stack e.g. `.NET 7`, for the publish options, choose `code`, then choose the region you want your datacenter to be located e.g. `central US`.
+3. Pick windows as your operating system if you're deploying to a windows web server or linux for a linux web server.
+4. Choose a pricing plan, select the free plan for development find out more about pricing plans [here](https://azure.microsoft.com/en-us/pricing/details/app-service/windows/).
+### Deployment
+You can choose to enable github actions from the deployment section or you can configure this after you've created the web app on azure.
