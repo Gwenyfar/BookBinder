@@ -72,16 +72,56 @@ This endpoint deletes an existing author from the database.
   -  If author id is incorrect, it returns a `BadRequest` response with error message.
   -  If the author doesn't exis it returns a `NotFound` response with error message.
   -  If there's a failure commiting to the database, it returns an `InternalServerError` response.
+---------------------------------------------------------------
+
 
 ## Deployment to Azure App Service
 This api was deployed to two azure app service plans, windows and linux; this section describes the deployment process for both cases.
-### Steps
+### Prerequisites
 - Ensure you have an azure account with an active subscription.
 - On azure portal create a new resource and select web app.
+- Ensure you have basic knowledge of github actions.
 ### Basics
-1. Create a new resource group for your web application i.e. a resource group is used to hold a group of related azure resources that can exchange data between themselves. The resource group for this web app is named bookbinder.
+1. Create a new resource group for your web application i.e. a resource group is used to classify a group of related azure resources that can exchange data between themselves. The resource group for this web app is named bookbinder.
 2. Choose the specifics of your application like the runtime stack e.g. `.NET 7`, for the publish options, choose `code`, then choose the region you want your datacenter to be located e.g. `central US`.
 3. Pick windows as your operating system if you're deploying to a windows web server or linux for a linux web server.
-4. Choose a pricing plan, select the free plan for development find out more about pricing plans [here](https://azure.microsoft.com/en-us/pricing/details/app-service/windows/).
+4. Choose a pricing plan, select the free plan for development; find out more about pricing plans [here](https://azure.microsoft.com/en-us/pricing/details/app-service/windows/).
 ### Deployment
 You can choose to enable github actions from the deployment section or you can configure this after you've created the web app on azure.
+If you enable github actions, a workflow automation file will be generated for you by default.
+- Select the github account containing the project repository.
+- Select an organisation if the project belongs to one.
+- Select the branch you want to deploy, in this case the main branch was deployed.
+- Preview the workflow file created for you by default;
+  - Ensure you have the appropriate trigger(s) for your workflow.
+  - Declare any variables you want to use in your workflow file.
+  - Change values of some variables to what you would prefer e.g. the output directory for the published application might not be in the directory of your preference.
+  - Ensure you're using the correct versions of the actions with their correct inputs.
+- You can go ahead and create your app service now.
+
+  > ### Write Workflow Yourself
+  > *If you decide to not enable github actions and you want to create the workflow file yourself, do so from github as follows;*
+  > - Without enabling github actions, create the appservice.
+  > - Navigate to the newly created resource, and click on **download publish profile**.
+  > - Copy the downloaded data and enter it as a secret in your github repository.
+  > - You can now go to the `Actions` tab of your repo and create a workflow for deployment from scratch or using a template.
+  > - In your deployment job section reference your publish profile in the appropriate section like so;
+  >   
+  > ```
+  >   name: Deploy to Azure Web App
+  >      uses: azure/webapps-deploy@v2
+  >      with:
+  >        app-name: 'YOUR_APP'
+  >        publish-profile: ${{secrets.YOUR_APP_PUBLISH_PROFILE}}
+  >        package: .
+  > ```
+
+Trigger the workflow to deploy your application.
+
+> **Note**
+> For a linux application you follow basically the same steps as above, but **specify your `OS` as `Linux`both on azure portal and in your workflow file**.
+>  - Lastly, in the `General settings` tab of your app configuration on azure portal, set the *start up command* to
+>  - ```
+>    dotnet your_app.dll
+>    ```
+>   + This is necessary for bash to known exactly what command to run in order to launch your application.
