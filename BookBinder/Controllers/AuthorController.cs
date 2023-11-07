@@ -55,12 +55,12 @@ namespace BookBinder.Controllers
 
         /// <summary>
         /// action to return all authors
+        /// </summary>
         /// <remarks>
         /// Sample request:
         /// 
         ///     GET api/authors
         /// </remarks>
-        /// </summary>
         /// <returns>all authors</returns>
         [ProducesResponseType(typeof(ResponseResult<IEnumerable<FetchAuthorDto>>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ResponseResult), StatusCodes.Status500InternalServerError)]
@@ -76,6 +76,7 @@ namespace BookBinder.Controllers
 
         /// <summary>
         /// action to update properties of an author
+        /// </summary>
         /// <remarks>
         /// Sample request:
         /// 
@@ -87,7 +88,6 @@ namespace BookBinder.Controllers
         ///         "email": "iru@gmail.com"
         ///     }
         /// </remarks>
-        /// </summary>
         /// <param name="command">model used to update an author</param>
         [ProducesResponseType(typeof(ResponseResult), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ResponseResult), StatusCodes.Status500InternalServerError)]
@@ -102,13 +102,13 @@ namespace BookBinder.Controllers
 
         /// <summary>
         /// action to delete an author
-        /// <remark>
+        /// </summary>
+        /// <remarks>
         /// Sample request:
         /// 
         ///     DELETE api/authors/id/a9852712-124b-4c3b-8ae2-d43b3d126b2b
-        /// </remark>
-        /// </summary>
-        /// <param name="id"></param>
+        /// </remarks>
+        /// <param name="id">id of an existing author</param>
         [ProducesResponseType(typeof(ResponseResult), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ResponseResult), StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(typeof(ResponseResult), StatusCodes.Status400BadRequest)]
