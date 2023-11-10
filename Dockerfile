@@ -17,12 +17,13 @@ COPY . /source
 
 WORKDIR /source/BookBinder
 
+ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=true
+
 # Build the application.
 # Leverage a cache mount to /root/.nuget/packages so that subsequent builds don't have to re-download packages.
 # If TARGETARCH is "amd64", replace it with "x64" - "x64" is .NET's canonical name for this and "amd64" doesn't
 #   work in .NET 6.0.
-RUN --mount=type=cache,id=nuget,target=/root/.nuget/packages \
-    dotnet publish -a ${TARGETARCH/amd64/x64} --use-current-runtime --self-contained false -o /bookbinder
+RUN dotnet publish -a ${TARGETARCH/amd64/x64} --use-current-runtime --self-contained false -o /bookbinder
 
 # If you need to enable globalization and time zones:
 # https://github.com/dotnet/dotnet-docker/blob/main/samples/enable-globalization.md
@@ -42,6 +43,9 @@ WORKDIR /bookbinder
 
 # Copy everything needed to run the app from the "build" stage.
 COPY --from=build /bookbinder .
+
+ENV CCL__SQLDB="Server=6f19fa3fd8c6,1433;Database=BookBinder;User Id=sa;Password=DaisyWheel7@"
+ENV key=value
 
 # Create a non-privileged user that the app will run under.
 # See https://docs.docker.com/go/dockerfile-user-best-practices/
