@@ -17,6 +17,10 @@ COPY . /source
 
 WORKDIR /source/BookBinder
 
+COPY *.csproj /source
+
+RUN dotnet restore
+
 # Build the application.
 # Leverage a cache mount to /root/.nuget/packages so that subsequent builds don't have to re-download packages.
 # If TARGETARCH is "amd64", replace it with "x64" - "x64" is .NET's canonical name for this and "amd64" doesn't
@@ -46,7 +50,9 @@ ENV \
 RUN apk add --no-cache \
     icu-data-full \
     icu-libs
-ENV CCL__SQLDB="Server=fdda4272117f,1433;Database=BookBinder;User Id=sa;Password=DaisyWheel7@"
+ENV CCL__SQLDB="Server=6f19fa3fd8c6,1433;Database=BookBinder;User Id=sa;Password=DaisyWheel7@"
+
+EXPOSE 80
 
 WORKDIR /bookbinder
 
