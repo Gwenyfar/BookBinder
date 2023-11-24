@@ -62,6 +62,9 @@ COPY --from=build /bookbinder .
 # Create a non-privileged user that the app will run under.
 # See https://docs.docker.com/go/dockerfile-user-best-practices/
 ARG UID=10001
+
+RUN apk add --no-cache openssl
+
 RUN adduser \
     --disabled-password \
     --gecos "" \
