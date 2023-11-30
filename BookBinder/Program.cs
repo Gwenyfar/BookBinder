@@ -1,11 +1,19 @@
 using BookBinder.Application;
 using BookBinder.Services;
+using Microsoft.AspNetCore;
+using System.Net;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+builder.WebHost.UseKestrel(options =>
+{
+    options.Listen(IPAddress.Any, 8080, listenOptions =>
+    {
+        listenOptions.UseHttps("./certificate.pfx", "./private.key");
+    });
+});
 var configuration = builder.Configuration;
 var appConfig = configuration.ExtractAppSettings(LoggerFactory.Create(l => l.AddConsole()));
 var bootstrapper = new Bootstrapper(appConfig);

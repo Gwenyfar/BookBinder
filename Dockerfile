@@ -19,6 +19,7 @@ WORKDIR /source/BookBinder
 
 COPY *.csproj /source
 
+
 RUN dotnet restore
 
 # Build the application.
@@ -54,25 +55,28 @@ ENV CCL__SQLDB="Server=6f19fa3fd8c6,1433;Database=BookBinder;User Id=sa;Password
 
 EXPOSE 80
 
+
 WORKDIR /bookbinder
 
+COPY revocent.crt .
+COPY private.key .
 # Copy everything needed to run the app from the "build" stage.
 COPY --from=build /bookbinder .
 
 # Create a non-privileged user that the app will run under.
 # See https://docs.docker.com/go/dockerfile-user-best-practices/
-ARG UID=10001
+# ARG UID=10001
 
 RUN apk add --no-cache openssl
 
-RUN adduser \
-    --disabled-password \
-    --gecos "" \
-    --home "/nonexistent" \
-    --shell "/sbin/nologin" \
-    --no-create-home \
-    --uid "${UID}" \
-    bookbinderuser
-USER bookbinderuser
+# RUN adduser \
+#     --disabled-password \
+#     --gecos "" \
+#     --home "/nonexistent" \
+#     --shell "/sbin/nologin" \
+#     --no-create-home \
+#     --uid "${UID}" \
+#     bookbinderuser
+# USER bookbinderuser
 
 ENTRYPOINT ["dotnet", "BookBinder.dll"]
