@@ -7,6 +7,7 @@ using BookBinder.Application.Commands.UpdateAuthor;
 using BookBinder.Application.Queries.FetchAuthors;
 using BookBinder.Domain.DTOs;
 using BookBinder.Infrastructure.Utilities;
+using BookBinder.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookBinder.Controllers
@@ -16,6 +17,7 @@ namespace BookBinder.Controllers
     /// </summary>
     [Route("api/authors")]
     [ApiController]
+    [TypeFilter(typeof(ApiKeyAttribute))]
     public class AuthorController : BaseController
     {
         /// <summary>

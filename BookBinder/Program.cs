@@ -15,6 +15,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
+    options.AddSwaggerApiKeySecurity();
     var path = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     var pathString = Path.Combine(AppContext.BaseDirectory, path);
     options.IncludeXmlComments(pathString);
@@ -23,14 +24,13 @@ builder.Services.AddScoped<IApplication>(a => bootstrapper.Application);
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+app.UseApiKey();
 
 app.UseAuthorization();
 
