@@ -12,6 +12,8 @@ namespace BookBinder.Infrastructure.Mapping
             Map(u => u.Email).Not.Nullable();
             Map(u => u.UserName).Nullable();
             Map(u => u.PhoneNumber).Not.Nullable();
+            Map(u => u.PasswordHash).Not.Nullable();
+            Map(u => u.Role).Not.Nullable();
             HasManyToMany(u => u.Books)
                 .Table("UserToBook")
                 .ParentKeyColumn("User_id")

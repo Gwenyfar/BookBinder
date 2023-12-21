@@ -11,6 +11,10 @@ namespace BookBinder.Application.Data.Mapping
             Map(u => u.FirstName).Not.Nullable();
             Map(u => u.LastName).Not.Nullable();
             Map(u => u.Email).Not.Nullable();
+            Map(u => u.UserName).Nullable();
+            Map(u => u.PhoneNumber).Nullable();
+            Map(u => u.PasswordHash).Not.Nullable();
+            Map(u => u.Role).Not.Nullable();
         }
     }
 }
