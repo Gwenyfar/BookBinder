@@ -21,6 +21,8 @@ namespace BookBinder.Application.Commands.CreateAuthor
             return new Validation()
                 .IsValidString(FirstName, "invalid first name")
                 .IsValidString(LastName, "invalid last name")
+                .IsValidEmail(Email, "invalid email")
+                .IsValidString(Password, "invalid password")
                 .Result;
         }
         /// <summary>
@@ -35,5 +37,6 @@ namespace BookBinder.Application.Commands.CreateAuthor
         /// author's email
         /// </summary>
         public string Email { get; set; }
+        public string Password { get; set; }
     }
 }
