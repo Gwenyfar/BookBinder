@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -48,12 +49,27 @@ namespace BookBinder.Infrastructure.Utilities
         /// <returns>this validation object</returns>
         public Validation IsValidGuid(Guid input, string errorMessage)
         {
-            var isInvalid = input.ToString().Length != 32;
+            var isInvalid = input.Equals(Guid.Empty);
             if (isInvalid && Result.Successful)
             {
                 Result = ResponseResult.Failed(System.Net.HttpStatusCode.BadRequest).AddError(errorMessage);
             }
             else if (isInvalid && Result.Successful)
+            {
+                Result.AddError(errorMessage);
+            }
+            return this;
+        }
+
+
+        public Validation IsValidEmail(string input, string errorMessage)
+        {
+            var isValid = new EmailAddressAttribute().IsValid(input);
+            if (!isValid && Result.Successful)
+            {
+                Result = ResponseResult.Failed(System.Net.HttpStatusCode.BadRequest).AddError(errorMessage);
+            }
+            else if (!isValid && Result.Successful)
             {
                 Result.AddError(errorMessage);
             }
