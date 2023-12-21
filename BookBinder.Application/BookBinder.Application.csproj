@@ -12,7 +12,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BookBinder.Infrastructure\BookBinder.Infrastructure.csproj" />
-    <ProjectReference Include="..\Shared\BookBinder.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
