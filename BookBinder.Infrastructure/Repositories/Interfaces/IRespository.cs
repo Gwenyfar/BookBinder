@@ -9,5 +9,6 @@ namespace BookBinder.Infrastructure.Repositories.Interfaces
         Task<T> FetchByIdAsync(Guid id);
         Task RemoveAsync(T entity);
         Task UpdateAsync(T entity);
+        Task<bool> ExistsAsync(string name);
     }
 }

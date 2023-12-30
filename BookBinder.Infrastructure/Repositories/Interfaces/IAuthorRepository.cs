@@ -7,8 +7,7 @@ using System.Threading.Tasks;
 
 namespace BookBinder.Infrastructure.Repositories.Interfaces
 {
-    public interface IAuthorRepository : IRespository<Author>
+    public interface IAuthorRepository : IUserRepository<Author>
     {
-
     }
 }

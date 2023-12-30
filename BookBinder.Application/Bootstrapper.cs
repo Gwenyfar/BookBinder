@@ -7,6 +7,7 @@ using BookBinder.Infrastructure.DataBaseConfiguration;
 using BookBinder.Infrastructure.Mapping;
 using BookBinder.Infrastructure.Repositories;
 using BookBinder.Infrastructure.Repositories.Interfaces;
+using BookBinder.Infrastructure.Security;
 using Microsoft.Extensions.Logging;
 using System.Reflection;
 
@@ -69,7 +70,7 @@ namespace BookBinder.Application
             containerBuilder.Register((o) => logger)
                 .As<ILogger>().InstancePerLifetimeScope();
 
-            RegisterRepositories(containerBuilder);
+            RegisterServices(containerBuilder);
 
             containerBuilder.RegisterType<Dbcontext>()
                 .As<Dbcontext>().PropertiesAutowired()
@@ -101,7 +102,7 @@ namespace BookBinder.Application
         /// registers repository types with the DI container
         /// </summary>
         /// <param name="containerBuilder">autofac's container builder</param>
-        private void RegisterRepositories(ContainerBuilder containerBuilder)
+        private void RegisterServices(ContainerBuilder containerBuilder)
         {
             
             containerBuilder.RegisterType<AuthorRepository>()
@@ -109,6 +110,18 @@ namespace BookBinder.Application
 
             containerBuilder.RegisterType<PublisherRepository>()
                 .As<IPublisherRepository>().InstancePerLifetimeScope();
+
+            containerBuilder.RegisterType<PasswordManager>()
+                .As<IPasswordManager>().InstancePerLifetimeScope();
+
+            containerBuilder.RegisterType<TokenProvider>()
+                .As<ITokenProvider>().InstancePerLifetimeScope();
+
+            containerBuilder.RegisterType<AccessManager>()
+                .As<IAccessManager>()
+                .PropertiesAutowired()
+                .InstancePerLifetimeScope();
+
         }
         /// <summary>
         /// application settings

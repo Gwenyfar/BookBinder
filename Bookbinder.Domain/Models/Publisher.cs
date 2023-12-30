@@ -1,10 +1,10 @@
-﻿namespace BookBinder.Domain.Models
+﻿using Bookbinder.Domain.Models;
+
+namespace BookBinder.Domain.Models
 {
-    public class Publisher : BaseEntity
+    public class Publisher : ApplicationUser
     {
         public virtual string Company { get; set; }
         public virtual string Address { get; set; }
-        public virtual string Email { get; set; }
-        public virtual IList<Book> Books { get; set; } = new List<Book>();
     }
 }

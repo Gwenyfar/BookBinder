@@ -17,10 +17,22 @@ namespace BookBinder.Infrastructure.Repositories
             await CommitAsync();
         }
 
+        public async Task<bool> ExistsAsync(string email)
+        {
+            var exists = await Session.Query<Author>().AnyAsync(a=>a.Email.ToLower() == email.ToLower());
+            return exists;
+        }
+
         public async Task<List<Author>> FetchAllAsync()
         {
             var entities = await Session.Query<Author>().ToListAsync();
             return entities;
+        }
+
+        public async Task<Author> FetchByEmailAsync(string email)
+        {
+            var author = await Session.Query<Author>().FirstOrDefaultAsync(a => a.Email.ToLower() == email.ToLower());
+            return author;
         }
 
         public async Task<Author> FetchByIdAsync(Guid id)
