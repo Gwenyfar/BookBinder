@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "Bookbinder.Tests": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:51177;http://localhost:51180"
+    }
+  }
+}
