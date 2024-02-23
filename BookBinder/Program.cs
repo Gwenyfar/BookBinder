@@ -17,6 +17,7 @@ var bootstrapper = new Bootstrapper(appConfig);
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(o =>
 {
     o.Authority = "https://localhost:5001";
+    //o.Audience = "bookbinderapi";
     o.TokenValidationParameters.ValidateAudience = false;
     o.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
 });

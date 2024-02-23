@@ -14,8 +14,7 @@ public static class Config
     public static IEnumerable<ApiScope> ApiScopes =>
         new ApiScope[]
         {
-            new ApiScope("scope1"),
-            new ApiScope("scope2"),
+            new ApiScope("bookbinderapi")
         };
 
     public static IEnumerable<Client> Clients =>
@@ -30,7 +29,7 @@ public static class Config
                 AllowedGrantTypes = GrantTypes.ClientCredentials,
                 ClientSecrets = { new Secret("511536EF-F270-4058-80CA-1C89C192F69A".Sha256()) },
 
-                AllowedScopes = { "scope1" }
+                AllowedScopes = { "bookbinderapi" }
             },
 
             // interactive client using code flow + pkce
