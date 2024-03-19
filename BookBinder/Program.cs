@@ -1,5 +1,6 @@
 using BookBinder.Application;
 using BookBinder.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,7 +21,7 @@ builder.Services.AddSwaggerGen(options =>
     options.IncludeXmlComments(pathString);
 });
 builder.Services.AddScoped<IApplication>(a => bootstrapper.Application);
-
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme);
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
