@@ -8,26 +8,24 @@ using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 
 var configuration = builder.Configuration;
 var appConfig = configuration.ExtractAppSettings(LoggerFactory.Create(l => l.AddConsole()));
 var bootstrapper = new Bootstrapper(appConfig);
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
-      options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
-            {
-                Name = "Authorization",
-                Type = SecuritySchemeType.ApiKey,
-                Scheme = "Bearer",
-                BearerFormat = "JWT",
-                In = ParameterLocation.Header,
-                Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 1safsfsdfdfd\"",
-            });
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 1safsfsdfdfd\"",
+    });
 
     options.AddSecurityRequirement(new OpenApiSecurityRequirement
         {
@@ -50,18 +48,19 @@ builder.Services.AddSwaggerGen(options =>
 });
 builder.Services.AddScoped<IApplication>(a => bootstrapper.Application);
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
-//builder.Services.AddAuthorization(c=>c.DefaultPolicy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme).)
+                .AddMicrosoftIdentityWebApi(options =>
+                {
+                    builder.Configuration.Bind("AzureAd", options);
+                    options.TokenValidationParameters.NameClaimType = "name";
+                }, options => { builder.Configuration.Bind("AzureAd", options); });
+builder.Services.AddAuthorization(c => c.DefaultPolicy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme).AddRequirements(new ScopeAuthorizationRequirement { RequiredScopesConfigurationKey = $"AzureAd:Scopes" }).Build());
 builder.Services.AddHttpContextAccessor();
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
 
+
+app.UseSwagger();
+app.UseSwaggerUI();
 app.UseHttpsRedirection();
 
 app.UseAuthentication();

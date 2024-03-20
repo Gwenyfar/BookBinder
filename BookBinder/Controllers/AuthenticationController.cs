@@ -19,15 +19,15 @@ namespace BookBinder.Controllers
             _logger = logger;
         }
 
-        [HttpPost]
-        [Authorize]
-        public async Task<IActionResult> SingleSignOn()
-        {
-            var token = await HttpContext.GetTokenAsync("Bearer");
-            _logger.LogInformation(token);
-           await HttpContext.SignInAsync(JwtBearerDefaults.AuthenticationScheme, User, new AuthenticationProperties { IsPersistent = true });
-            var response = new ResponseResult { Successful = true };
-            return FetchResponse(response);
-        }
+        //[HttpPost]
+        //[Authorize]
+        //public async Task<IActionResult> SingleSignOn()
+        //{
+        //    var token = await HttpContext.GetTokenAsync("Bearer");
+        //    _logger.LogInformation(token);
+        //   await HttpContext.SignInAsync(JwtBearerDefaults.AuthenticationScheme, User, new AuthenticationProperties { IsPersistent = true });
+        //    var response = new ResponseResult { Successful = true };
+        //    return FetchResponse(response);
+        //}
     }
 }
