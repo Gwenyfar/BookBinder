@@ -1,6 +1,8 @@
 ﻿using BookBinder.Application;
 using BookBinder.Infrastructure.Utilities;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,10 +18,11 @@ namespace BookBinder.Controllers
             _logger = logger;
         }
 
-        [HttpGet]
+        [HttpPost]
         [Authorize]
-        public async Task<IActionResult> SingleSignOn(string token)
+        public async Task<IActionResult> SingleSignOn()
         {
+            var token = await HttpContext.GetTokenAsync("Bearer");
             _logger.LogInformation(token);
             var response = new ResponseResult { Successful = true };
             return FetchResponse(response);
