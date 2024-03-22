@@ -47,12 +47,14 @@ builder.Services.AddSwaggerGen(options =>
     options.IncludeXmlComments(pathString);
 });
 builder.Services.AddScoped<IApplication>(a => bootstrapper.Application);
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddMicrosoftIdentityWebApi(options =>
                 {
                     builder.Configuration.Bind("AzureAd", options);
                     options.TokenValidationParameters.NameClaimType = "name";
                 }, options => { builder.Configuration.Bind("AzureAd", options); });
+
 builder.Services.AddAuthorization(c => c.DefaultPolicy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme).AddRequirements(new ScopeAuthorizationRequirement { RequiredScopesConfigurationKey = $"AzureAd:Scopes" }).Build());
 builder.Services.AddHttpContextAccessor();
 var app = builder.Build();
