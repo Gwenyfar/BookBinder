@@ -48,14 +48,22 @@ builder.Services.AddSwaggerGen(options =>
 });
 builder.Services.AddScoped<IApplication>(a => bootstrapper.Application);
 
+builder.Services.AddCors(options => options.AddDefaultPolicy(p => p.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddMicrosoftIdentityWebApi(options =>
                 {
                     builder.Configuration.Bind("AzureAd", options);
+                    //options.Audience = "7d219245-4395-4cb1-b5bd-7930da7c4f0e";
+                    //options.Authority = "https://login.microsoftonline.com/fa23820c-5ae0-43de-968f-69e872bc6200/v2.0";
+                    //options.MetadataAddress = "https://login.microsoftonline.com/organizations/v2.0/.well-known/openid-configuration";
                     options.TokenValidationParameters.NameClaimType = "name";
-                }, options => { builder.Configuration.Bind("AzureAd", options); });
+                    options.SaveToken = true;
+                    options.TokenValidationParameters.ValidateAudience = true;
+                    options.TokenValidationParameters.ValidateIssuer = true;
+                }, op => { builder.Configuration.Bind("AzureAd", op); });
 
-builder.Services.AddAuthorization(c => c.DefaultPolicy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme).AddRequirements(new ScopeAuthorizationRequirement { RequiredScopesConfigurationKey = $"AzureAd:Scopes" }).Build());
+//builder.Services.AddAuthorization(c => c.DefaultPolicy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme).AddRequirements(new ScopeAuthorizationRequirement { RequiredScopesConfigurationKey = $"AzureAd:Scopes" }).Build());
 builder.Services.AddHttpContextAccessor();
 var app = builder.Build();
 
@@ -67,7 +75,7 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
+app.UseCors();
 app.MapControllers();
 
 app.Run();
