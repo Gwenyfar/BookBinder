@@ -1,5 +1,7 @@
-﻿using System;
+﻿using FluentMigrator.Infrastructure;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,6 +22,13 @@ namespace BookBinder.Infrastructure.Utilities
             Result = ResponseResult.Success();
         }
 
+        public Validation IsValidEmail(string input, string error)
+        {
+            var passed  = new EmailAddressAttribute().IsValid(input);
+            Validate(passed, error);
+            return this;
+        }
+
         /// <summary>
         /// validates a string
         /// </summary>
@@ -29,14 +38,7 @@ namespace BookBinder.Infrastructure.Utilities
         public Validation IsValidString(string input, string errorMessage)
         {
             var isInvalid = string.IsNullOrWhiteSpace(input) || string.IsNullOrEmpty(input);
-            if (isInvalid && Result.Successful)
-            {
-                Result = ResponseResult.Failed(System.Net.HttpStatusCode.BadRequest).AddError(errorMessage);
-            }
-            else if(isInvalid && Result.Successful)
-            {
-                Result.AddError(errorMessage);
-            }
+            Validate(isInvalid, errorMessage);
             return this;
         }
 
@@ -49,17 +51,21 @@ namespace BookBinder.Infrastructure.Utilities
         public Validation IsValidGuid(Guid input, string errorMessage)
         {
             var isInvalid = input.ToString().Length != 32;
-            if (isInvalid && Result.Successful)
-            {
-                Result = ResponseResult.Failed(System.Net.HttpStatusCode.BadRequest).AddError(errorMessage);
-            }
-            else if (isInvalid && Result.Successful)
-            {
-                Result.AddError(errorMessage);
-            }
+            Validate(isInvalid, errorMessage);
             return this;
         }
 
+        public void Validate(bool passed, string error)
+        {
+            if (passed && Result.Successful)
+            {
+                Result = ResponseResult.Failed(System.Net.HttpStatusCode.BadRequest).AddError(error);
+            }
+            else if (passed && Result.Successful)
+            {
+                Result.AddError(error);
+            }
+        }
         /// <summary>
         /// a response after all validation
         /// </summary>

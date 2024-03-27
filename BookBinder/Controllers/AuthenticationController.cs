@@ -19,15 +19,26 @@ namespace BookBinder.Controllers
             _logger = logger;
         }
 
-        //[HttpPost]
-        //[Authorize]
-        //public async Task<IActionResult> SingleSignOn()
-        //{
-        //    var token = await HttpContext.GetTokenAsync("Bearer");
-        //    _logger.LogInformation(token);
-        //   await HttpContext.SignInAsync(JwtBearerDefaults.AuthenticationScheme, User, new AuthenticationProperties { IsPersistent = true });
-        //    var response = new ResponseResult { Successful = true };
-        //    return FetchResponse(response);
-        //}
+        [HttpPost("sso")]
+        [Authorize("SSO")]
+        public async Task<IActionResult> SingleSignOn()
+        {
+            var token = await HttpContext.GetTokenAsync("Bearer");
+            _logger.LogInformation(token);
+            await HttpContext.SignInAsync("SSO", User, new AuthenticationProperties { IsPersistent = true });
+            var response = new ResponseResult { Successful = true };
+            return FetchResponse(response);
+        }
+
+        
+        [HttpPost("login")]
+        public async Task<IActionResult> Login()
+        {
+            var token = await HttpContext.GetTokenAsync("Bearer");
+            _logger.LogInformation(token);
+            await HttpContext.SignInAsync(JwtBearerDefaults.AuthenticationScheme, User, new AuthenticationProperties { IsPersistent = true });
+            var response = new ResponseResult { Successful = true };
+            return FetchResponse(response);
+        }
     }
 }

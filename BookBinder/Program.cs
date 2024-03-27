@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Identity.Web;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
+using static System.Net.WebRequestMethods;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,9 +25,9 @@ builder.Services.AddSwaggerGen(options =>
         Name = "Authorization",
         Type = SecuritySchemeType.ApiKey,
         Scheme = "Bearer",
-        BearerFormat = "JWT",
+        BearerFormat = "Security",
         In = ParameterLocation.Header,
-        Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 1safsfsdfdfd\"",
+        Description = "Security Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 1safsfsdfdfd\"",
     });
 
     options.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -49,23 +50,32 @@ builder.Services.AddSwaggerGen(options =>
     options.IncludeXmlComments(pathString);
 });
 builder.Services.AddScoped<IApplication>(a => bootstrapper.Application);
+builder.Services.AddScoped<ILogger>(l => LoggerFactory.Create(l => l.AddDebug()).CreateLogger());
 
 builder.Services.AddCors(options => options.AddDefaultPolicy(p => p.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                    .AddJwtBearer(options =>
-                {
-                    //builder.Configuration.Bind("AzureAd", options);
-                    options.Audience = "7d219245-4395-4cb1-b5bd-7930da7c4f0e";
-                    options.Authority = "https://login.microsoftonline.com/fa23820c-5ae0-43de-968f-69e872bc6200/v2.0";
-                    options.MetadataAddress = "https://login.microsoftonline.com/organizations/v2.0/.well-known/openid-configuration";
-                    options.SaveToken = true;
-                    options.TokenValidationParameters.NameClaimType = "name";
-                    options.TokenValidationParameters.ValidateAudience = true;
-                    options.TokenValidationParameters.ValidateIssuer = true;
-                    options.TokenValidationParameters.ValidateIssuerSigningKey = true;
-                    options.TokenValidationParameters.ValidateLifetime = true;
-                });
+    .AddJwtBearer("SSO", options =>
+{
+    //builder.Configuration.Bind("AzureAd", options);
+    options.Audience = "7d219245-4395-4cb1-b5bd-7930da7c4f0e";
+    options.TokenValidationParameters.ValidIssuer = "https://login.microsoftonline.com/fa23820c-5ae0-43de-968f-69e872bc6200/v2.0";
+    options.MetadataAddress = "https://login.microsoftonline.com/organizations/v2.0/.well-known/openid-configuration";
+    options.SaveToken = true;
+    options.TokenValidationParameters.NameClaimType = "name";
+    options.TokenValidationParameters.ValidateAudience = true;
+    options.TokenValidationParameters.ValidateIssuer = true;
+    options.TokenValidationParameters.ValidateIssuerSigningKey = true;
+    options.TokenValidationParameters.ValidateLifetime = true;
+}).AddJwtBearer(options =>
+{
+    options.Audience = "bookbinder.com";
+    options.TokenValidationParameters.ValidIssuer = "bookbinderapi";
+    options.TokenValidationParameters.ValidateAudience = true;
+    options.TokenValidationParameters.ValidateIssuer = true;
+    options.TokenValidationParameters.ValidateIssuerSigningKey = true;
+    options.TokenValidationParameters.ValidateLifetime = true;
+});
 
 //.AddMicrosoftIdentityWebApi(options =>
 //{
@@ -75,11 +85,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 //    //options.MetadataAddress = "https://login.microsoftonline.com/organizations/v2.0/.well-known/openid-configuration";
 //    options.TokenValidationParameters.NameClaimType = "name";
 //    options.SaveToken = true;
+//    options.TokenValidationParameters.ValidIssuer = "https://login.microsoftonline.com/fa23820c-5ae0-43de-968f-69e872bc6200/v2.0";
 //    options.TokenValidationParameters.ValidateAudience = true;
 //    options.TokenValidationParameters.ValidateIssuer = true;
 //}, op => { builder.Configuration.Bind("AzureAd", op); });
 
-//builder.Services.AddAuthorization(c => c.DefaultPolicy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme).AddRequirements(new ScopeAuthorizationRequirement { RequiredScopesConfigurationKey = $"AzureAd:Scopes" }).Build());
+builder.Services.AddAuthorization(c => c.AddPolicy("SSO", new AuthorizationPolicyBuilder().AddAuthenticationSchemes("SSO").RequireAuthenticatedUser().Build()));
 builder.Services.AddHttpContextAccessor();
 var app = builder.Build();
 

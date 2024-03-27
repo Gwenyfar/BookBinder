@@ -9,6 +9,6 @@ namespace BookBinder.Infrastructure.Repositories.Interfaces
 {
     public interface IAuthorRepository : IRespository<Author>
     {
-
+        Task<Author> FetchbyEmailAsync(string email);
     }
 }

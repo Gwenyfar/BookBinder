@@ -23,6 +23,12 @@ namespace BookBinder.Infrastructure.Repositories
             return entities;
         }
 
+        public async Task<Author> FetchbyEmailAsync(string email)
+        {
+            var author = await Session.Query<Author>().FirstOrDefaultAsync(a => a.Email.ToLower() == email.ToLower());
+            return author;
+        }
+
         public async Task<Author> FetchByIdAsync(Guid id)
         {
             var entity = await Session.Query<Author>().FirstOrDefaultAsync(x => x.Id == id);

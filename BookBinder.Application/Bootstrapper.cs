@@ -4,6 +4,7 @@ using BookBinder.Application.Commands.CreateAuthor;
 using BookBinder.Application.Queries;
 using BookBinder.Infrastructure;
 using BookBinder.Infrastructure.DataBaseConfiguration;
+using BookBinder.Infrastructure.Security;
 using BookBinder.Infrastructure.Mapping;
 using BookBinder.Infrastructure.Repositories;
 using BookBinder.Infrastructure.Repositories.Interfaces;
@@ -41,7 +42,7 @@ namespace BookBinder.Application
                         .Migrations(typeof(UserMapping).Assembly)
                         .SetupDatabaseSchema(containerBuilder);
 
-            InitialiseModule(ApplicationSettings, containerBuilder);
+            InitialiseApplication(ApplicationSettings, containerBuilder);
 
             Container = containerBuilder.Build();
             Application.Container = Container;
@@ -61,7 +62,7 @@ namespace BookBinder.Application
         /// </summary>
         /// <param name="applicationSettings">core app settings</param>
         /// <param name="containerBuilder">autofac's container builder</param>
-        private void InitialiseModule(ApplicationSettings applicationSettings, ContainerBuilder containerBuilder)
+        private void InitialiseApplication(ApplicationSettings applicationSettings, ContainerBuilder containerBuilder)
         {
             var logger = applicationSettings.LoggerFactory.CreateLogger(AppName);
             logger.LogInformation($"{AppName} is initialising..");
@@ -69,7 +70,7 @@ namespace BookBinder.Application
             containerBuilder.Register((o) => logger)
                 .As<ILogger>().InstancePerLifetimeScope();
 
-            RegisterRepositories(containerBuilder);
+            RegisterAppServices(containerBuilder);
 
             containerBuilder.RegisterType<Dbcontext>()
                 .As<Dbcontext>().PropertiesAutowired()
@@ -98,10 +99,10 @@ namespace BookBinder.Application
         }
 
         /// <summary>
-        /// registers repository types with the DI container
+        /// registers service types with the DI container
         /// </summary>
         /// <param name="containerBuilder">autofac's container builder</param>
-        private void RegisterRepositories(ContainerBuilder containerBuilder)
+        private void RegisterAppServices(ContainerBuilder containerBuilder)
         {
             
             containerBuilder.RegisterType<AuthorRepository>()
@@ -109,6 +110,12 @@ namespace BookBinder.Application
 
             containerBuilder.RegisterType<PublisherRepository>()
                 .As<IPublisherRepository>().InstancePerLifetimeScope();
+
+            containerBuilder.RegisterType<JWTProvider>()
+                .As<IJWTProvider>().InstancePerLifetimeScope();
+
+            containerBuilder.RegisterType<PasswordManager>()
+                .As<PasswordManager>().InstancePerLifetimeScope();
         }
         /// <summary>
         /// application settings
