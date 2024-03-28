@@ -16,20 +16,27 @@ namespace BookBinder.Infrastructure.Migrations
                 .WithColumn("LastName").AsString().NotNullable()
                 .WithColumn("Email").AsString().NotNullable().Indexed("IX_Users_Email")
                 .WithColumn("UserName").AsString().Nullable()
-                .WithColumn("PhoneNumber").AsString().Nullable();
+                .WithColumn("PhoneNumber").AsString().Nullable()
+                .WithColumn("PasswordHash").AsString().NotNullable()
+                .WithColumn("Admin_id").AsGuid().Nullable();
 
             Create.Table("Authors")
                 .InSchema(Database.SCHEMA)
                 .WithColumn("Id").AsGuid().Unique().NotNullable().PrimaryKey()
                 .WithColumn("FirstName").AsString().NotNullable()
                 .WithColumn("LastName").AsString().NotNullable()
-                .WithColumn("Email").AsString().NotNullable().Indexed("IX_Authors_Email");
+                .WithColumn("Email").AsString().NotNullable().Indexed("IX_Authors_Email")
+                .WithColumn("UserName").AsString().Nullable()
+                .WithColumn("PhoneNumber").AsString().Nullable()
+                .WithColumn("PasswordHash").AsString().NotNullable()
+                .WithColumn("Admin_id").AsGuid().Nullable();
 
             Create.Table("Admins")
                 .InSchema(Database.SCHEMA)
                 .WithColumn("Id").AsGuid().Unique().NotNullable().PrimaryKey()
-                .WithColumn("FirstName").AsString().NotNullable()
-                .WithColumn("LastName").AsString().NotNullable()
+                .WithColumn("UserName").AsString().Nullable()
+                .WithColumn("PhoneNumber").AsString().Nullable()
+                .WithColumn("PasswordHash").AsString().NotNullable()
                 .WithColumn("Email").AsString().NotNullable();
 
             Create.Table("Publishers")
@@ -37,7 +44,11 @@ namespace BookBinder.Infrastructure.Migrations
                 .WithColumn("Id").AsGuid().Unique().NotNullable().PrimaryKey()
                 .WithColumn("Company").AsString().NotNullable()
                 .WithColumn("Address").AsString().NotNullable()
-                .WithColumn("Email").AsString().NotNullable().Indexed("IX_Users_Email");
+                .WithColumn("Email").AsString().NotNullable().Indexed("IX_Users_Email")
+                .WithColumn("UserName").AsString().Nullable()
+                .WithColumn("PhoneNumber").AsString().Nullable()
+                .WithColumn("PasswordHash").AsString().NotNullable()
+                .WithColumn("Admin_id").AsGuid().Nullable();
 
             Create.Table("Books")
                 .InSchema(Database.SCHEMA)
@@ -46,7 +57,8 @@ namespace BookBinder.Infrastructure.Migrations
                 .WithColumn("ISBN").AsString().NotNullable()
                 .WithColumn("Genre").AsString().NotNullable()
                 .WithColumn("PublishedDate").AsDateTime().NotNullable()
-                .WithColumn("Publisher_id").AsGuid().Nullable();
+                .WithColumn("Publisher_id").AsGuid().Nullable()
+                .WithColumn("Admin_id").AsGuid().Nullable();
 
             Create.ForeignKey("Fk_Books_Publishers")
                 .FromTable("Books")
@@ -55,6 +67,38 @@ namespace BookBinder.Infrastructure.Migrations
                 .ToTable("Publishers")
                 .InSchema(Database.SCHEMA)
                 .PrimaryColumn("Id");
+
+            Create.ForeignKey("Fk_Books_Admins")
+                .FromTable("Books")
+                .InSchema(Database.SCHEMA)
+                .ForeignColumn("Admin_id")
+                .ToTable("Admins")
+                .InSchema(Database.SCHEMA)
+                .PrimaryColumn("Id");
+
+            Create.ForeignKey("Fk_Users_Admins")
+               .FromTable("Users")
+               .InSchema(Database.SCHEMA)
+               .ForeignColumn("Admin_id")
+               .ToTable("Admins")
+               .InSchema(Database.SCHEMA)
+               .PrimaryColumn("Id");
+
+            Create.ForeignKey("Fk_Authors_Admins")
+              .FromTable("Authors")
+              .InSchema(Database.SCHEMA)
+              .ForeignColumn("Admin_id")
+              .ToTable("Admins")
+              .InSchema(Database.SCHEMA)
+              .PrimaryColumn("Id");
+
+            Create.ForeignKey("Fk_Publishers_Admins")
+               .FromTable("Publishers")
+               .InSchema(Database.SCHEMA)
+               .ForeignColumn("Admin_id")
+               .ToTable("Admins")
+               .InSchema(Database.SCHEMA)
+               .PrimaryColumn("Id");
 
             Create.Table("AuthorToBook")
                 .InSchema(Database.SCHEMA)

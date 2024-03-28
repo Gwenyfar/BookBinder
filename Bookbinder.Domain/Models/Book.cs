@@ -7,6 +7,7 @@
         public virtual string Genre { get; set; }
         public virtual Publisher Publisher { get; set; }
         public virtual DateTime PublishedDate { get; set; }
+        public virtual Admin Admin { get; set; }
         public virtual IList<Author> Authors { get; set; } = new List<Author>();
         public virtual IList<User> Users { get; set; } = new List<User>();
 

@@ -1,4 +1,5 @@
 ﻿using BookBinder.Application;
+using BookBinder.Application.Commands.Login;
 using BookBinder.Infrastructure.Utilities;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -23,21 +24,21 @@ namespace BookBinder.Controllers
         [Authorize("SSO")]
         public async Task<IActionResult> SingleSignOn()
         {
-            var token = await HttpContext.GetTokenAsync("Bearer");
+            var token = await HttpContext.GetTokenAsync("SSO","access_token");
             _logger.LogInformation(token);
-            await HttpContext.SignInAsync("SSO", User, new AuthenticationProperties { IsPersistent = true });
+            //await HttpContext.SignInAsync("SSO", User, new AuthenticationProperties { IsPersistent = true });
             var response = new ResponseResult { Successful = true };
             return FetchResponse(response);
         }
 
         
         [HttpPost("login")]
-        public async Task<IActionResult> Login()
+        public async Task<IActionResult> Login(LoginCommand logIn)
         {
-            var token = await HttpContext.GetTokenAsync("Bearer");
+            var response = await Application.ExecuteCommandAsync<LoginCommand, string>(logIn);
+            var token = await HttpContext.GetTokenAsync(JwtBearerDefaults.AuthenticationScheme, "access_token");
             _logger.LogInformation(token);
-            await HttpContext.SignInAsync(JwtBearerDefaults.AuthenticationScheme, User, new AuthenticationProperties { IsPersistent = true });
-            var response = new ResponseResult { Successful = true };
+            
             return FetchResponse(response);
         }
     }

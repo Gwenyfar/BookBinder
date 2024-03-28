@@ -5,8 +5,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Identity.Web;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
+using System.Text;
 using static System.Net.WebRequestMethods;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -50,7 +52,7 @@ builder.Services.AddSwaggerGen(options =>
     options.IncludeXmlComments(pathString);
 });
 builder.Services.AddScoped<IApplication>(a => bootstrapper.Application);
-builder.Services.AddScoped<ILogger>(l => LoggerFactory.Create(l => l.AddDebug()).CreateLogger());
+builder.Services.AddScoped<ILogger>(l => LoggerFactory.Create(l => l.AddConsole()).CreateLogger("Token"));
 
 builder.Services.AddCors(options => options.AddDefaultPolicy(p => p.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
 
@@ -70,11 +72,13 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 }).AddJwtBearer(options =>
 {
     options.Audience = "bookbinder.com";
+    options.SaveToken = true;
     options.TokenValidationParameters.ValidIssuer = "bookbinderapi";
     options.TokenValidationParameters.ValidateAudience = true;
     options.TokenValidationParameters.ValidateIssuer = true;
     options.TokenValidationParameters.ValidateIssuerSigningKey = true;
     options.TokenValidationParameters.ValidateLifetime = true;
+    options.TokenValidationParameters.IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("bookbinder.com72984034875-234873647859"));
 });
 
 //.AddMicrosoftIdentityWebApi(options =>

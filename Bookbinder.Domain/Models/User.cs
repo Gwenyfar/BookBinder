@@ -6,6 +6,7 @@ namespace BookBinder.Domain.Models
     {
         public virtual string FirstName { get; set; }
         public virtual string LastName { get; set; }
+        public virtual Admin Admin { get; set; }
         public virtual IList<Book> Books { get; set; } =
         new List<Book>();
     }

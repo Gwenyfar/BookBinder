@@ -11,6 +11,7 @@ namespace BookBinder.Infrastructure.Mapping
             Map(b => b.ISBN).Not.Nullable();
             Map(b => b.Genre).Not.Nullable();
             References(b => b.Publisher);
+            References(b => b.Admin);
             Map(b => b.PublishedDate).Not.Nullable();
             HasManyToMany(b => b.Authors)
                 .Table("AuthorToBook")

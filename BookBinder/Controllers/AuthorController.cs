@@ -48,6 +48,7 @@ namespace BookBinder.Controllers
         [ProducesResponseType(typeof(ResponseResult), StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(typeof(ResponseResult), StatusCodes.Status400BadRequest)]
         [HttpPost]
+        [Authorize("SSO")]
         public async Task<IActionResult> AddAuthor(CreateAuthorCommand command)
         {
             var response = await Application.ExecuteCommandAsync<CreateAuthorCommand, Guid>(command);

@@ -1,4 +1,5 @@
 ﻿using BookBinder.Domain.Models;
+using BookBinder.Infrastructure.Security;
 using BookBinder.Infrastructure.Utilities;
 using System;
 using System.Collections.Generic;
@@ -25,9 +26,12 @@ namespace BookBinder.Application.Commands.CreateAuthor
                 FirstName = command.FirstName,
                 LastName = command.LastName,
                 Email = command.Email,
+                PasswordHash = PasswordManager.HashPassword("defaultPassword")
             };
             await DbContext.AuthorRepository.AddAsync(newAuthor);
             return ResponseResult<Guid>.Success(newAuthor.Id);
         }
+
+        public PasswordManager PasswordManager { get; set; }
     }
 }

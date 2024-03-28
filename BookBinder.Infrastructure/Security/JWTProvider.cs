@@ -23,7 +23,7 @@ namespace BookBinder.Infrastructure.Security
                 new Claim(JwtRegisteredClaimNames.Aud, "bookbinder.com")
             };
             var expiry = DateTime.UtcNow.AddMinutes(30);
-            var securityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("books"));
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("bookbinder.com72984034875-234873647859"));
             var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             var accessToken = new JwtSecurityToken(claims: userClaims, signingCredentials: signingCredentials, expires: expiry);
             return new JwtSecurityTokenHandler().WriteToken(accessToken);

@@ -37,8 +37,8 @@ namespace BookBinder.Infrastructure.Utilities
         /// <returns>this validation object</returns>
         public Validation IsValidString(string input, string errorMessage)
         {
-            var isInvalid = string.IsNullOrWhiteSpace(input) || string.IsNullOrEmpty(input);
-            Validate(isInvalid, errorMessage);
+            var passed = !(string.IsNullOrWhiteSpace(input) || string.IsNullOrEmpty(input));
+            Validate(passed, errorMessage);
             return this;
         }
 
@@ -50,18 +50,18 @@ namespace BookBinder.Infrastructure.Utilities
         /// <returns>this validation object</returns>
         public Validation IsValidGuid(Guid input, string errorMessage)
         {
-            var isInvalid = input.ToString().Length != 32;
-            Validate(isInvalid, errorMessage);
+            var passed = input.ToString().Length == 32;
+            Validate(passed, errorMessage);
             return this;
         }
 
         public void Validate(bool passed, string error)
         {
-            if (passed && Result.Successful)
+            if (!passed && Result.Successful)
             {
                 Result = ResponseResult.Failed(System.Net.HttpStatusCode.BadRequest).AddError(error);
             }
-            else if (passed && Result.Successful)
+            else if (passed && Result.NotSuccessful)
             {
                 Result.AddError(error);
             }
